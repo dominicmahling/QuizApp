@@ -26,7 +26,21 @@
 
   <!-- Add your site or application content here -->
   <p>Hello world! This is HTML5 Boilerplate.</p>
+  <pre id="quizOutput">Lade Quizdaten...</pre>
   <script src="js/app.js"></script>
+  <script type="module">
+    import { getQuizData } from "./js/app.js";
+    const output = document.getElementById("quizOutput");
+    async function showQuiz() {
+      try {
+        const data = await getQuizData();
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        output.textContent = "Fehler: " + err.message;
+      }
+    }
+    showQuiz()
+  </script>
 
 </body>
 
