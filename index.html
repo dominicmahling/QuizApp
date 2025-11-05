@@ -43,6 +43,7 @@
           decodeHTML(data.results[0].incorrect_answers[1]), decodeHTML(data.results[0].incorrect_answers[2])];
         shuffleArray(answers);
         buttons.forEach((btn, index) => {
+          btn.classList.add("fancy-button");
           btn.textContent = answers[index];
         });
         buttons.forEach((btn, index) => {btn.replaceWith(btn.cloneNode(true)); // remove old listeneres
@@ -72,6 +73,39 @@
     <button id="btn3">Alt 3</button>
     <button id="btn4">Alt 4</button>
   </div>
+  <style>
+    #button-container {
+      display: flex;
+      gap: 15px;          /* Space between buttons */
+      flex-wrap: wrap;     /* Wrap if too many buttons */
+      margin: 20px;
+    }
+
+    .fancy-button {
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #6b73ff, #000dff);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .fancy-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      background: linear-gradient(135deg, #000dff, #6b73ff);
+    }
+
+    .fancy-button:active {
+      transform: translateY(0);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+  </style>
+
 
 </body>
 
