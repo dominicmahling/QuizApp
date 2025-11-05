@@ -26,7 +26,6 @@
 
   <!-- Add your site or application content here -->
 
-  <p>Hello world! This is HTML5 Boilerplate.</p>
   <pre id="quizOutput">Fetching API...</pre>
   <meta charset="UTF-8">
   <script src="js/app.js"></script>
@@ -74,6 +73,25 @@
     <button id="btn4">Alt 4</button>
   </div>
   <style>
+    #quizOutput {
+      background: rgba(255, 255, 255, 0.8);
+      display: inline-block;
+      padding: 25px 35px;
+      margin-bottom: 30px;
+      border-radius: 15px;
+      font-size: 22px;
+      font-weight: 600;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      max-width: 700px;
+      line-height: 1.4;
+      transition: all 0.4s ease;
+    }
+
+    #quizOutput:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
     #button-container {
       display: flex;
       gap: 15px;          /* Space between buttons */
