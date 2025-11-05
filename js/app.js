@@ -6,13 +6,26 @@ export async function getQuizData() {
     if (!response.ok) throw new Error("Error API is not reachable.");
 
     const data = await response.json(); // Transform to js
+    if (!isDataValid(data)){
+      return getQuizData();
+    }
     console.log("Quizdaten:", data);
 
     // Save as var
     const quizData = data;
     return quizData;
   } catch (error) {
-    console.error("Fehler:", error);
+    return getQuizData();
+  }
+}
+
+function isDataValid(data){
+  try {
+    data.results[0].question;
+    return true;
+  }
+  catch (error){
+    return false;
   }
 }
 
