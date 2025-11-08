@@ -45,7 +45,7 @@
           btn.classList.add("fancy-button");
           btn.textContent = answers[index];
         });
-        buttons.forEach((btn, index) => {btn.replaceWith(btn.cloneNode(true)); // remove old listeneres
+        buttons.forEach((btn) => {btn.replaceWith(btn.cloneNode(true)); // remove old listener
         });
         const newButtons = document.querySelectorAll("#button-container button");
         newButtons.forEach((btn, index) => {
