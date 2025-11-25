@@ -23,10 +23,6 @@ export async function getQuizData() {
       return getQuizData();
     }
     console.log("Quizdaten:", data);
-
-    // Save as var
-
-
     return data;
   } catch (error) {
     return getQuizData();
