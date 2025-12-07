@@ -39,24 +39,16 @@
             decodeHTML(data.results[0].correct_answer),
             ...data.results[0].incorrect_answers.map(a => decodeHTML(a))
           ];
-
           shuffleArray(answers);
 
-
-          buttons.forEach((btn, index) => {
-            btn.textContent = answers[index];
-            btn.classList.add(btn.textContent.length>1 ? "fancy-button" : "hidden");
-
-          });
-
-
-
-          //const newButtons = document.querySelectorAll("#button-container button");
           nextButton.addEventListener("click", async () => {
             clearButtons(buttons,nextButton);
-            showQuiz(await newData);
+            await showQuiz(await newData);
           })
-          buttons.forEach((btn) => {
+
+          buttons.forEach((btn,index) => {
+            btn.textContent = answers[index];
+            btn.classList.add(btn.textContent.length>1 ? "fancy-button" : "hidden");
             btn.addEventListener("click", () => {
               btn.classList.add("underline");
               let text;
