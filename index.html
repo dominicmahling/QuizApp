@@ -9,8 +9,10 @@
   <body>
 
     <div class="quiz-wrapper">
+      <div class="quiz-top">
       <pre id="quizOutput">Fetching API...</pre>
-
+      <button id="nextBtn" class="fancy-button">Next</button>
+      </div>
       <div id="button-container">
         <button id="btn1">Alt 1</button>
         <button id="btn2">Alt 2</button>
@@ -20,14 +22,17 @@
     </div>
 
     <script type="module">
-      import { getQuizData, decodeHTML, shuffleArray } from "./js/app.js";
+      import { getQuizData, decodeHTML, shuffleArray, showNextQuestionButtons, clearButtons } from "./js/app.js";
+
 
       const output = document.getElementById("quizOutput");
 
-      async function showQuiz() {
+
+      async function showQuiz(data) {
         try {
-          const data = await getQuizData();
+          const newData = getQuizData();
           output.textContent = decodeHTML(data.results[0].question);
+          const nextButton = document.querySelector("#nextBtn");
 
           const buttons = document.querySelectorAll("#button-container button");
           const answers = [
@@ -37,24 +42,32 @@
 
           shuffleArray(answers);
 
+
           buttons.forEach((btn, index) => {
             btn.textContent = answers[index];
-            btn.classList.add("fancy-button");
+            btn.classList.add(btn.textContent.length>1 ? "fancy-button" : "hidden");
+
           });
 
-          buttons.forEach((btn) => btn.replaceWith(btn.cloneNode(true)));
 
-          const newButtons = document.querySelectorAll("#button-container button");
 
-          newButtons.forEach((btn) => {
+          //const newButtons = document.querySelectorAll("#button-container button");
+          nextButton.addEventListener("click", async () => {
+            clearButtons(buttons,nextButton);
+            showQuiz(await newData);
+          })
+          buttons.forEach((btn) => {
             btn.addEventListener("click", () => {
+              btn.classList.add("underline");
+              let text;
               if (btn.textContent === decodeHTML(data.results[0].correct_answer)) {
-                alert("Richtig!");
-                showQuiz();
+                text =("Richtig!");
               } else {
-                alert("Falsch! Richtige Antwort: " + decodeHTML(data.results[0].correct_answer));
-                showQuiz();
+                text = ("Falsch! Richtige Antwort: " + decodeHTML(data.results[0].correct_answer));
               }
+              buttons.forEach((btn) =>{
+                  btn.classList.add(btn.textContent === decodeHTML(data.results[0].correct_answer) ? "correct" : "wrong");
+              })
             });
           });
 
@@ -63,7 +76,7 @@
         }
       }
 
-      showQuiz();
+      showQuiz(await getQuizData());
     </script>
 
     <style>
@@ -82,6 +95,14 @@
         text-align: center;
         max-width: 900px;
         width: 90%;
+      }
+
+      .quiz-top{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 20px;
       }
 
       #quizOutput {
@@ -104,6 +125,21 @@
         gap: 15px;
       }
 
+      .hidden {
+        display: none !important;
+      }
+
+      .correct {
+        background: green !important;
+        color: white;
+      }
+
+      .wrong {
+        background: red !important;
+        color: white;
+      }
+
+
       .fancy-button {
         padding: 14px 24px;
         font-size: 18px;
@@ -115,6 +151,10 @@
         cursor: pointer;
         box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         transition: all 0.3s ease;
+      }
+
+      .underline{
+        text-decoration: underline;
       }
 
       .fancy-button:hover {

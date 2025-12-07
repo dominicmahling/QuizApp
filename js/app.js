@@ -53,4 +53,21 @@ export function shuffleArray(array) {
   return array;
 }
 
+export function clearButtons(buttons, button){
+  buttons.forEach((btn)=>{
+    btn.classList.remove("correct");
+    btn.classList.remove("wrong");
+    btn.classList.remove("underline");
+    btn.classList.remove("hidden");
+    btn.replaceWith(btn.cloneNode(true));
+  });
+  button.replaceWith(button.cloneNode(true));
+}
+
+export function showNextQuestionButtons(buttons, message, fn){
+
+
+
+}
+
 
