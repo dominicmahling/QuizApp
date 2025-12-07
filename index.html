@@ -1,128 +1,128 @@
 <!doctype html>
 <html class="no-js" lang="de">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Quiz</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
 
-<div class="quiz-wrapper">
-  <pre id="quizOutput">Fetching API...</pre>
+    <div class="quiz-wrapper">
+      <pre id="quizOutput">Fetching API...</pre>
 
-  <div id="button-container">
-    <button id="btn1">Alt 1</button>
-    <button id="btn2">Alt 2</button>
-    <button id="btn3">Alt 3</button>
-    <button id="btn4">Alt 4</button>
-  </div>
-</div>
+      <div id="button-container">
+        <button id="btn1">Alt 1</button>
+        <button id="btn2">Alt 2</button>
+        <button id="btn3">Alt 3</button>
+        <button id="btn4">Alt 4</button>
+      </div>
+    </div>
 
-<script type="module">
-  import { getQuizData, decodeHTML, shuffleArray } from "./js/app.js";
+    <script type="module">
+      import { getQuizData, decodeHTML, shuffleArray } from "./js/app.js";
 
-  const output = document.getElementById("quizOutput");
+      const output = document.getElementById("quizOutput");
 
-  async function showQuiz() {
-    try {
-      const data = await getQuizData();
-      output.textContent = decodeHTML(data.results[0].question);
+      async function showQuiz() {
+        try {
+          const data = await getQuizData();
+          output.textContent = decodeHTML(data.results[0].question);
 
-      const buttons = document.querySelectorAll("#button-container button");
-      const answers = [
-        decodeHTML(data.results[0].correct_answer),
-        ...data.results[0].incorrect_answers.map(a => decodeHTML(a))
-      ];
+          const buttons = document.querySelectorAll("#button-container button");
+          const answers = [
+            decodeHTML(data.results[0].correct_answer),
+            ...data.results[0].incorrect_answers.map(a => decodeHTML(a))
+          ];
 
-      shuffleArray(answers);
+          shuffleArray(answers);
 
-      buttons.forEach((btn, index) => {
-        btn.textContent = answers[index];
-        btn.classList.add("fancy-button");
-      });
+          buttons.forEach((btn, index) => {
+            btn.textContent = answers[index];
+            btn.classList.add("fancy-button");
+          });
 
-      buttons.forEach((btn) => btn.replaceWith(btn.cloneNode(true)));
+          buttons.forEach((btn) => btn.replaceWith(btn.cloneNode(true)));
 
-      const newButtons = document.querySelectorAll("#button-container button");
+          const newButtons = document.querySelectorAll("#button-container button");
 
-      newButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          if (btn.textContent === decodeHTML(data.results[0].correct_answer)) {
-            alert("Richtig!");
-            showQuiz();
-          } else {
-            alert("Falsch! Richtige Antwort: " + decodeHTML(data.results[0].correct_answer));
-            showQuiz();
-          }
-        });
-      });
+          newButtons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+              if (btn.textContent === decodeHTML(data.results[0].correct_answer)) {
+                alert("Richtig!");
+                showQuiz();
+              } else {
+                alert("Falsch! Richtige Antwort: " + decodeHTML(data.results[0].correct_answer));
+                showQuiz();
+              }
+            });
+          });
 
-    } catch (err) {
-      output.textContent = "Fehler: " + err.message;
-    }
-  }
+        } catch (err) {
+          output.textContent = "Fehler: " + err.message;
+        }
+      }
 
-  showQuiz();
-</script>
+      showQuiz();
+    </script>
 
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
-  .quiz-wrapper {
-    text-align: center;
-    max-width: 900px;
-    width: 90%;
-  }
+      .quiz-wrapper {
+        text-align: center;
+        max-width: 900px;
+        width: 90%;
+      }
 
-  #quizOutput {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 25px 35px;
-    margin-bottom: 30px;
-    border-radius: 15px;
-    font-size: 24px;
-    font-weight: 600;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    line-height: 1.5;
-    white-space: pre-wrap;      /* multiline */
-    word-wrap: break-word;
-  }
+      #quizOutput {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 25px 35px;
+        margin-bottom: 30px;
+        border-radius: 15px;
+        font-size: 24px;
+        font-weight: 600;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        line-height: 1.5;
+        white-space: pre-wrap;      /* multiline */
+        word-wrap: break-word;
+      }
 
-  #button-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-  }
+      #button-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
 
-  .fancy-button {
-    padding: 14px 24px;
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #6b73ff, #000dff);
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-  }
+      .fancy-button {
+        padding: 14px 24px;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #6b73ff, #000dff);
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+      }
 
-  .fancy-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    background: linear-gradient(135deg, #000dff, #6b73ff);
-  }
-</style>
+      .fancy-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        background: linear-gradient(135deg, #000dff, #6b73ff);
+      }
+    </style>
 
-</body>
+  </body>
 </html>
