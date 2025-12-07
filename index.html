@@ -1,70 +1,15 @@
 <!doctype html>
-<html class="no-js" lang="">
-
+<html class="no-js" lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
+  <title>Quiz</title>
   <link rel="stylesheet" href="css/style.css">
-  <meta name="description" content="">
-
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  <meta property="og:image:alt" content="">
-
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.png">
-
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#fafafa">
 </head>
-
 <body>
 
-  <!-- Add your site or application content here -->
-
+<div class="quiz-wrapper">
   <pre id="quizOutput">Fetching API...</pre>
-  <meta charset="UTF-8">
-  <script src="js/app.js"></script>
-  <script type="module">
-
-    import { getQuizData, decodeHTML, shuffleArray } from "./js/app.js";
-    const output = document.getElementById("quizOutput");
-    async function showQuiz() {
-      try {
-        const data = await getQuizData();
-        output.textContent = decodeHTML(data.results[0].question);
-        const buttons = document.querySelectorAll("#button-container button");
-        const answers = [decodeHTML(data.results[0].correct_answer), decodeHTML(data.results[0].incorrect_answers[0]),
-          decodeHTML(data.results[0].incorrect_answers[1]), decodeHTML(data.results[0].incorrect_answers[2])];
-        shuffleArray(answers);
-        buttons.forEach((btn, index) => {
-          btn.classList.add("fancy-button");
-          btn.textContent = answers[index];
-        });
-        buttons.forEach((btn) => {btn.replaceWith(btn.cloneNode(true)); // remove old listener
-        });
-        const newButtons = document.querySelectorAll("#button-container button");
-        newButtons.forEach((btn, index) => {
-          btn.addEventListener("click", () => {if(btn.textContent === decodeHTML(data.results[0].correct_answer)){
-            alert('Richtig!');
-            showQuiz();
-          }
-          else {
-            alert('Falsch! Richtige Antwort: ' + decodeHTML(data.results[0].correct_answer) );
-            showQuiz();
-          }
-        });
-        });
-      } catch (err) {
-        output.textContent = "Fehler: " + err.message;
-      }
-    }
-    showQuiz()
-  </script>
 
   <div id="button-container">
     <button id="btn1">Alt 1</button>
@@ -72,59 +17,112 @@
     <button id="btn3">Alt 3</button>
     <button id="btn4">Alt 4</button>
   </div>
-  <style>
-    #quizOutput {
-      background: rgba(255, 255, 255, 0.8);
-      display: inline-block;
-      padding: 25px 35px;
-      margin-bottom: 30px;
-      border-radius: 15px;
-      font-size: 22px;
-      font-weight: 600;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      max-width: 2500px;
-      line-height: 1.4;
-      transition: all 0.4s ease;
-    }
+</div>
 
-    #quizOutput:hover {
-      transform: scale(1.02);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    }
+<script type="module">
+  import { getQuizData, decodeHTML, shuffleArray } from "./js/app.js";
 
-    #button-container {
-      display: flex;
-      gap: 15px;          /* Space between buttons */
-      flex-wrap: wrap;     /* Wrap if too many buttons */
-      margin: 20px;
-    }
+  const output = document.getElementById("quizOutput");
 
-    .fancy-button {
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #6b73ff, #000dff);
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
-    }
+  async function showQuiz() {
+    try {
+      const data = await getQuizData();
+      output.textContent = decodeHTML(data.results[0].question);
 
-    .fancy-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      background: linear-gradient(135deg, #000dff, #6b73ff);
-    }
+      const buttons = document.querySelectorAll("#button-container button");
+      const answers = [
+        decodeHTML(data.results[0].correct_answer),
+        ...data.results[0].incorrect_answers.map(a => decodeHTML(a))
+      ];
 
-    .fancy-button:active {
-      transform: translateY(0);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-  </style>
+      shuffleArray(answers);
 
+      buttons.forEach((btn, index) => {
+        btn.textContent = answers[index];
+        btn.classList.add("fancy-button");
+      });
+
+      buttons.forEach((btn) => btn.replaceWith(btn.cloneNode(true)));
+
+      const newButtons = document.querySelectorAll("#button-container button");
+
+      newButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (btn.textContent === decodeHTML(data.results[0].correct_answer)) {
+            alert("Richtig!");
+            showQuiz();
+          } else {
+            alert("Falsch! Richtige Antwort: " + decodeHTML(data.results[0].correct_answer));
+            showQuiz();
+          }
+        });
+      });
+
+    } catch (err) {
+      output.textContent = "Fehler: " + err.message;
+    }
+  }
+
+  showQuiz();
+</script>
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .quiz-wrapper {
+    text-align: center;
+    max-width: 900px;
+    width: 90%;
+  }
+
+  #quizOutput {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 25px 35px;
+    margin-bottom: 30px;
+    border-radius: 15px;
+    font-size: 24px;
+    font-weight: 600;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    line-height: 1.5;
+    white-space: pre-wrap;      /* multiline */
+    word-wrap: break-word;
+  }
+
+  #button-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .fancy-button {
+    padding: 14px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6b73ff, #000dff);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+  }
+
+  .fancy-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, #000dff, #6b73ff);
+  }
+</style>
 
 </body>
-
 </html>
